@@ -2,13 +2,6 @@ var express = require('express');
 var router = express.Router();
 var pgp = require('pg-promise')(/*options*/)
 
-const databaseConfig= {
-  host: 'drawviddb.cdmlgyhqifrq.us-east-1.rds.amazonaws.com',
-  port: 5432,
-  database: 'drawvidposts',
-  user: 'drawvid',
-  password: 'Ilovemymom'
-};
 var db = pgp(databaseConfig)
 
 /* GET home page. */
