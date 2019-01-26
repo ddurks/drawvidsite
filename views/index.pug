@@ -1,7 +1,18 @@
 extends layout
 
+block scripts
+  script(src='/javascripts/client.js')
 block content
   p
-    | Most Recent Post
+    | 
   div(class="drawing-div")
-    img(src='/images/'+imagename, alt='self', class='homepost')
+    img(id='main-display',src=imagename, alt='self', class='homepost')
+  |
+  div(class="controls")
+    input(class='prev-next', id="prev", value='prev     <<', type='button', onclick='prevDrawing()')
+    |
+    |
+    input(id="random", value='random', type='button', onclick='randomDrawing()')
+    |
+    |
+    input(class='prev-next', id="next", value='>>     next', type='button', onclick='nextDrawing()')

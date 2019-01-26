@@ -2,6 +2,7 @@ doctype html
 html
   head
     title=title
+    block scripts
 
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
@@ -11,13 +12,13 @@ html
     // Site navigation menu
     ul.navbar
       li
-        a(href='index.html') home
+        a(href='/') home
       li
-        a(href='archive.html') archive
+        a(href='/archive') archive
       li
-        a(href='about.html') about
+        a(href='/about') about
       li
-        a(href='misc.html') misc
+        a(href='/misc') misc
 
     block content
 

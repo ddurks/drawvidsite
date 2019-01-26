@@ -3,8 +3,9 @@ title {
   text-align: center;
 }
 img.homepost {
-  max-width: 25%;
+  max-width: 40%;
   height: auto;
+  max-height: 75%;
 }
 body {
   text-align: center;
@@ -39,4 +40,14 @@ address {
   margin-top: 1em;
   padding-top: 1em;
   border-top: thin dotted 
+}
+input.prev-random {
+  background:none!important;
+  color:inherit;
+  border:none; 
+  padding:0!important;
+  font: inherit;
+  /*border is optional*/
+  border-bottom:1px solid #444; 
+  cursor: pointer;
 }
