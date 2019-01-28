@@ -33,15 +33,12 @@ ul.navbar a {
   display: inline-block;
   padding: 10px;
 }
-a:visited {
-  color: purple 
-}
 address {
   margin-top: 1em;
   padding-top: 1em;
   border-top: thin dotted 
 }
-input.prev-random {
+input.prev-next {
   background:none!important;
   color:inherit;
   border:none; 
@@ -50,4 +47,15 @@ input.prev-random {
   /*border is optional*/
   border-bottom:1px solid #444; 
   cursor: pointer;
+}
+#drawvid-display {
+  max-width: 10%;
+  height: auto;
+  max-height: 50%;
+}
+.boxed {
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  background: black;
 }
