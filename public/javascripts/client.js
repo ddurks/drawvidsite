@@ -1,4 +1,4 @@
-const HOST = 'http://drawvid-express-env.sdv2pjgjzk.us-east-2.elasticbeanstalk.com:3000/';
+const HOST = 'http://drawvid.com/';
 var current_post_number;
 var r_p;
 window.onload = async () => {
