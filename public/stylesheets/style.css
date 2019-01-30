@@ -12,7 +12,7 @@ body {
   padding-left: 0;
   font-family: "Times New Roman";
   color: black;
-  background-color:whitesmoke
+  background-color:rgb(148, 154, 160);
 }
 ul.navbar {
   border-width:1px 0;
@@ -33,23 +33,33 @@ ul.navbar a {
   display: inline-block;
   padding: 10px;
 }
+#home-nav {
+  color: yellow;
+}
+#archive-nav {
+  color: rgb(235, 86, 86);
+}
+#about-nav {
+  color: green;
+}
+#misc-nav {
+  color: blue;
+}
 address {
   margin-top: 1em;
   padding-top: 1em;
   border-top: thin dotted 
 }
-input.prev-next {
-  background:none!important;
-  color:inherit;
-  border:none; 
-  padding:0!important;
-  font: inherit;
-  /*border is optional*/
-  border-bottom:1px solid #444; 
-  cursor: pointer;
+.prev-next {
+  color: whitesmoke;
+  background-color: black;
+  border: none;
+}
+#random {
+  background-color: pink;
 }
 #drawvid-display {
-  max-width: 10%;
+  max-width: 15%;
   height: auto;
   max-height: 50%;
 }
