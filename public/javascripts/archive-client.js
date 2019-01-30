@@ -1,0 +1,34 @@
+const HOST = 'http://drawvid.com/';
+
+window.onload = async () => {
+    const response = await fetch(HOST + 'archive/allposts');
+    const myJson = await response.json(); 
+
+    var stringjson = JSON.stringify(myJson);
+    var values = JSON.parse(stringjson);
+    var options = {
+        valueNames: ['image', 'text', 'created_date'],
+        item: 'archive-item'
+    };
+    var archiveList = makeList(values)
+}
+
+function makeList(array) {
+    var list = document.getElementById('list')
+
+    for (var i = array.length-1; i >= 0; i--) {
+        // Create the list item:
+        var item = document.createElement('li');
+
+        var a = document.createElement('a');
+        var text = document.createTextNode(array[i].created_date.substr(0,10));
+        a.appendChild(text);
+        a.title = array[i].created_date.substr(0,9);
+        a.href = HOST + "post?name=" + array[i].image;
+
+        // Add it to the list:
+        list.appendChild(a);
+        var br = document.createElement("br");
+        list.appendChild(br);
+    }
+}
