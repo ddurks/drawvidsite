@@ -13,7 +13,6 @@ router.get('/allposts', function(req, res, next) {
   db.query('SELECT * FROM posts')
   .then(function (data) {
     res.send(data);
-    console.log('DATA:', data)
   })
   .catch(function (error) {
     console.log('ERROR:', error);

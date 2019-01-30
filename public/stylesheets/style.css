@@ -12,7 +12,7 @@ body {
   padding-left: 0;
   font-family: "Times New Roman";
   color: black;
-  background-color:rgb(148, 154, 160);
+  background-color:whitesmoke;
 }
 ul.navbar {
   border-width:1px 0;
@@ -26,23 +26,29 @@ h1 {
 }
 ul.navbar li {
   display: inline;
-  margin: 0.5em 0;
+  margin: 0.5em 1em;
   padding: 0.3em;
+  background-color: rgb(205, 220, 235);
+  border-radius: 15px;
 }
 ul.navbar a {
   display: inline-block;
   padding: 10px;
 }
-#home-nav {
+ul.navbar a:hover, ul.navbar a:visited, ul.navbar a:link, ul.navbar a:active
+{
+  text-decoration: none;
+}
+.home-title {
   color: yellow;
 }
-#archive-nav {
+.archive-title {
   color: rgb(235, 86, 86);
 }
-#about-nav {
+.about-title {
   color: green;
 }
-#misc-nav {
+.misc-title {
   color: blue;
 }
 address {
@@ -51,21 +57,26 @@ address {
   border-top: thin dotted 
 }
 .prev-next {
-  color: whitesmoke;
-  background-color: black;
+  color: black;
+  background-color: rgb(205, 220, 235);
   border: none;
+  font-weight: bold; 
 }
 #random {
   background-color: pink;
+  border-radius: 10px;
+  font-weight: bold;
 }
 #drawvid-display {
   max-width: 15%;
   height: auto;
   max-height: 50%;
 }
-.boxed {
+#boxed-title {
   text-align: center;
   vertical-align: middle;
-  color: white;
-  background: black;
+  background: rgb(205, 220, 235);
+}
+.bolded-body-text {
+  font-weight: bold;
 }
