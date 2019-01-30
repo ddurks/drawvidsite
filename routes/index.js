@@ -16,14 +16,9 @@ router.get('/', function(req, res, next) {
     console.log('ERROR:', error);
   });
 });
-
 /* GET about page. */
 router.get('/about', function(req, res, next) {
   res.render('about', { title: 'drawvid.com: about' });
-});
-/* GET archive page. */
-router.get('/archive', function(req, res, next) {
-  res.render('archive', { title: 'drawvid.com: archive' });
 });
 /* GET misc page. */
 router.get('/misc', function(req, res, next) {
@@ -43,6 +38,18 @@ router.get('/current_post', function(req, res, next) {
   });
 });
 
+/* Display specific post */
+router.get('/post', function(req, res, next) {
+  
+  console.log(req.query.name);
+  db.one("SELECT * FROM POSTS WHERE image='" + req.query.name + "'")
+  .then(function (data) {
+    res.render('index', { title: 'drawvid.com: ' + req.query.name, imagename: 'https://s3.amazonaws.com/drawvid-posts/' + data.image });
+  })
+  .catch(function (error) {
+    console.log('ERROR:', error);
+  });
+});
 
 /* GET random drawing for home page. */
 router.get('/random', function(req, res, next) {

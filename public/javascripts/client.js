@@ -1,4 +1,4 @@
-const HOST = 'http://drawvid.com/';
+const HOST = 'http://localhost:3000/';
 var current_post_number;
 var r_p;
 window.onload = async () => {
