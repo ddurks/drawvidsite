@@ -1,9 +1,9 @@
-**[http://drawvid.com](www.drawvid.com)**
+**[www.drawvid.com](http://drawvid.com)**
 ====
 
 drawvid.com web application
 
 **details**
-- node.js
-- postgresql
-- deployed via AWS elastic beanstalk
+* node.js
+* postgresql
+* deployed via AWS elastic beanstalk
