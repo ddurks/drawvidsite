@@ -4,7 +4,10 @@ var db = require('./db');
 
 var r_p = 0;
 
-/* GET home page. */
+/* GET site pages */
+/*================*/
+
+// GET home page
 router.get('/', function(req, res, next) {
   
   db.one('SELECT * FROM posts ORDER BY id DESC LIMIT 1')
@@ -15,11 +18,11 @@ router.get('/', function(req, res, next) {
     console.log('ERROR:', error);
   });
 });
-/* GET about page. */
+// GET about page
 router.get('/about', function(req, res, next) {
   res.render('about', { title: 'drawvid.com: about' });
 });
-/* GET misc page. */
+// GET misc page
 router.get('/misc', function(req, res, next) {
   res.render('misc', { title: 'drawvid.com: misc' });
 });
