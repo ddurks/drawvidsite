@@ -1,11 +1,17 @@
 var CANVAS_WIDTH = 480;
 var CANVAS_HEIGHT = 480;
+var PACE_DURATION_MAX = 10;
+
+// shim for datetime browser compatibility
+if (!Date.now) {
+    Date.now = function() { return new Date().getTime(); }
+}
 
 // create canvas
 var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas>");
 var canvas = canvasElement.get(0).getContext("2d");
 
-// small-man sprite
+// small-man sprite constants
 const scale = 0.30;
 const width = 250;
 const height = 275;
@@ -14,58 +20,119 @@ const scaledHeight = scale * height;
 var man_img = new Image();
 man_img.src = '/images/small-man-sprite-sheet.png';
 
-const man_loop = [0,1,2,3,4,5,6,7];
-let man_loop_i = 0;
+//  animation frame
 let frame = 0;
-let direction = 0;
-let standing = true;
-var posx = 50;
-var posy = 50;
+let pace_starttime = 0;
+let pace_duration = 100;
+
+// class for small-man sprite
+var Man = {
+    posx: 0,
+    posy: 0,
+    direction: 0,
+    curr_sprite_frame: 0,
+    speed: 5,
+
+    create: function(posx, posy) {
+        var man = Object.create(this);
+        man.loop = [0,1,2,3,4,5,6,7];
+        man.loop_i = 0;
+        man.posx = posx;
+        man.posy = posy;
+        man.direction = 0;
+        man.speed = 10;
+        return man;
+    },
+
+    move: function() {
+        if (this.direction == 0) {
+            if (this.posy > CANVAS_HEIGHT - scaledHeight ) {
+                this.posy = this.posy;
+            } else {
+                this.posy = this.posy + this.speed;
+            }
+        }
+        if (this.direction == 1) {
+            if(this.posx > CANVAS_WIDTH - scaledWidth) {
+                this.posx = this.posx;
+            } else {
+                this.posx = this.posx + this.speed;
+            }
+        }
+        if (this.direction == 2) {
+            if (this.posy < 0) {
+                this.posy = this.posy;
+            } else {
+                this.posy = this.posy - this.speed;
+            }
+        }
+        if (this.direction == 3) {
+            if (this.posx < 0 ) {
+                this.posx = this.posx;
+            } else {
+                this.posx = this.posx - this.speed;
+            }
+        }
+
+        if (this.loop_i < 7) {
+            this.loop_i++;
+        } else {
+            this.loop_i = 0;
+        }
+    }
+};
+
+var manObject = Man.create(50, 50);
+
+function getTimestampSeconds() {
+    return Math.floor(Date.now() / 1000);
+}
 
 function drawFrame(frameX, frameY, canvasX, canvasY) {
     canvas.drawImage(man_img, frameX * width, frameY * height, width, height, canvasX, canvasY, scaledWidth, scaledHeight);
 };
 
-function step() {
+function step(timestamp) {
     frame++;
-    var rand = Math.floor((Math.random() * 100));
     
     if (frame < 8) {
-        window.requestAnimationFrame(step);
+        window.requestAnimationFrame(function(timestamp) {
+            step(timestamp);
+        });
         return;
     }
-    frame = 0;
-    canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    drawFrame(man_loop[man_loop_i], direction, 200, 200);
-    man_loop_i ++;
-    if (man_loop_i >= man_loop.length) {
-        man_loop_i = 0;
-        direction++;
+    if ( (getTimestampSeconds() - pace_starttime) > pace_duration ) {
+        pace_starttime = getTimestampSeconds();
+        pace_duration = Math.floor((Math.random() * PACE_DURATION_MAX));
+        manObject.direction = Math.floor((Math.random() * 4))
     }
 
-    if(direction >= 4) {
-        direction = 0;
-    }
-    window.requestAnimationFrame(step);
+    frame = 0;
+    manObject.move();
+    canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    drawFrame(manObject.loop[manObject.loop_i], manObject.direction, manObject.posx, manObject.posy);
+
+    window.requestAnimationFrame(function(timestamp) {
+        step(timestamp);
+    });
 };
 
+let timestamp = getTimestampSeconds();
+
 function init() {
-    window.requestAnimationFrame(step);
+    timestamp = getTimestampSeconds();
+    pace_starttime = getTimestampSeconds();
+    pace_duration = Math.floor((Math.random() * PACE_DURATION_MAX));
+    window.requestAnimationFrame(function(timestamp) {
+        step(timestamp);
+    });
 };
 
 
 $(document).ready(function(){
     canvasElement.appendTo( "#canvas-div" );
 
-    man_img.onload = function() {
-        init();
-    };
-/*
-    // configure game loop
-    var FPS = 30;
-    setInterval(function() {
-        update();
-        draw();
-    }, 1000/FPS);
-    */
+        man_img.onload = function() {
+            init();
+        };
 });

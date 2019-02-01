@@ -27,7 +27,7 @@ h1 {
 }
 ul.navbar li {
   display: inline;
-  margin: 0.5em 1em;
+  margin: 0.5em 0.4em;
   padding: 0.3em;
   background-color: rgb(205, 220, 235);
   border-radius: 15px;
