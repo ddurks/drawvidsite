@@ -4,6 +4,6 @@
 drawvid.com web application
 
 **details**
-* node.js
+* node.js - express
 * postgresql
 * deployed via AWS elastic beanstalk
