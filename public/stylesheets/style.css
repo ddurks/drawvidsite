@@ -81,3 +81,7 @@ address {
 .bolded-body-text {
   font-weight: bold;
 }
+canvas {
+  border: 1em solid rgb(170, 238, 218);
+  border-radius: 10px;
+}
