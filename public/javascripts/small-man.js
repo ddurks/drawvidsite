@@ -1,6 +1,6 @@
 var CANVAS_WIDTH = 480;
 var CANVAS_HEIGHT = 480;
-var PACE_DURATION_MAX = 10;
+var PACE_DURATION_MAX = 3;
 
 // shim for datetime browser compatibility
 if (!Date.now) {
@@ -40,35 +40,40 @@ var Man = {
         man.posx = posx;
         man.posy = posy;
         man.direction = 0;
-        man.speed = 10;
+        man.speed = 25;
         return man;
     },
 
     move: function() {
+        console.log(this.posx, this.posy);
         if (this.direction == 0) {
-            if (this.posy > CANVAS_HEIGHT - scaledHeight ) {
-                this.posy = this.posy;
+            if (this.posy > CANVAS_HEIGHT - scaledHeight ) { 
+                this.posy = this.posy--;
+                this.direction = 2;
             } else {
                 this.posy = this.posy + this.speed;
             }
         }
         if (this.direction == 1) {
             if(this.posx > CANVAS_WIDTH - scaledWidth) {
-                this.posx = this.posx;
+                this.posx = this.posx--;
+                this.direction = 3;
             } else {
                 this.posx = this.posx + this.speed;
             }
         }
         if (this.direction == 2) {
             if (this.posy < 0) {
-                this.posy = this.posy;
+                this.posy = this.posy++;
+                this.direction = 0;
             } else {
                 this.posy = this.posy - this.speed;
             }
         }
         if (this.direction == 3) {
             if (this.posx < 0 ) {
-                this.posx = this.posx;
+                this.posx = this.posx++;
+                this.direction = 1;
             } else {
                 this.posx = this.posx - this.speed;
             }
@@ -110,6 +115,7 @@ function step(timestamp) {
     frame = 0;
     manObject.move();
     canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    canvas.fillStyle = "gray";
     drawFrame(manObject.loop[manObject.loop_i], manObject.direction, manObject.posx, manObject.posy);
 
     window.requestAnimationFrame(function(timestamp) {
