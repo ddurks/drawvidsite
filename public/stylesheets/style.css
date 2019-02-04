@@ -49,6 +49,7 @@ ul.body-list li a {
 }
 .home-title {
   color: yellow;
+  text-decoration: underline;
 }
 .archive-title {
   color: rgb(235, 86, 86);
