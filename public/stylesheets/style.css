@@ -40,6 +40,13 @@ ul.navbar a:hover, ul.navbar a:visited, ul.navbar a:link, ul.navbar a:active
 {
   text-decoration: none;
 }
+ul.body-list {
+  padding: 0;
+  list-style-type: none;
+}
+ul.body-list li a {
+  text-decoration: none;
+}
 .home-title {
   color: yellow;
 }

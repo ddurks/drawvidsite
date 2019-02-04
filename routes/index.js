@@ -26,6 +26,11 @@ router.get('/about', function(req, res, next) {
 router.get('/misc', function(req, res, next) {
   res.render('misc', { title: 'drawvid.com: misc' });
 });
+// GET small-man.js
+// GET misc page
+router.get('/small-man', function(req, res, next) {
+  res.render('small-man', { title: 'drawvid.com: small-man' });
+});
 
 /* GET current post number. */
 router.get('/current_post', function(req, res, next) {
