@@ -1,0 +1,11 @@
+extends layout
+
+block scripts
+    script(src='/javascripts/upload-mode.js')
+
+block content
+    br
+    br
+    input(type='text', id='textInput')
+    br
+    input(id='uploadButton', type='button', onclick='upload()')
