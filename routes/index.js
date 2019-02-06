@@ -22,14 +22,16 @@ router.get('/', function(req, res, next) {
 router.get('/about', function(req, res, next) {
   res.render('about', { title: 'drawvid.com: about' });
 });
-// GET misc page
-router.get('/misc', function(req, res, next) {
-  res.render('misc', { title: 'drawvid.com: misc' });
+// GET etc page
+router.get('/etc', function(req, res, next) {
+  res.render('etc', { title: 'drawvid.com: etc' });
 });
 // GET small-man.js
-// GET misc page
 router.get('/small-man', function(req, res, next) {
   res.render('small-man', { title: 'drawvid.com: small-man' });
+});
+router.get('/69/upload-mode', function(req, res, next) {
+  res.render('upload-mode', { title: 'drawvid.com: upload' });
 });
 
 /* GET current post number. */

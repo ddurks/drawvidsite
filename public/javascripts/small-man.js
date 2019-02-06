@@ -1,5 +1,5 @@
-var CANVAS_WIDTH = 480;
-var CANVAS_HEIGHT = 480;
+var CANVAS_WIDTH = 300;
+var CANVAS_HEIGHT = 300;
 var PACE_DURATION_MAX = 3;
 
 // shim for datetime browser compatibility
@@ -12,7 +12,7 @@ var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_H
 var canvas = canvasElement.get(0).getContext("2d");
 
 // small-man sprite constants
-const scale = 0.30;
+const scale = 0.25;
 const width = 250;
 const height = 275;
 const scaledWidth = scale * width;

@@ -1,4 +1,4 @@
-const HOST = 'http://localhost:3000/';
+const HOST = 'http://drawvid.com/';
 // # of currently displayed post
 var current_post_number;
 

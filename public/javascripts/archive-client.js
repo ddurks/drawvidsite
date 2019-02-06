@@ -1,4 +1,4 @@
-const HOST = 'http://localhost:3000/';
+const HOST = 'http://drawvid.com/';
 
 window.onload = async () => {
     const response = await fetch(HOST + 'archive/allposts');
