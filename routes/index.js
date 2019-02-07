@@ -1,6 +1,8 @@
 var express = require('express');
+var multer  = require('multer');
 var router = express.Router();
 var db = require('./db');
+var passwordHash = require('./passhash');
 
 var r_p = 0;
 
@@ -43,6 +45,16 @@ router.get('/small-man', function(req, res, next) {
 });
 router.get('/69/upload-mode', function(req, res, next) {
   res.render('upload-mode', { title: 'drawvid.com: upload' });
+});
+router.post('/check-password', function(req, res, next) {
+  var passhash = JSON.parse(req.body.passhash);
+  if (arraysEqual(passhash, passwordHash)) {
+    console.log("success");
+    res.json({"success":true});
+  } else {
+    console.log("failure");
+    res.json({"success":false});
+  }
 });
 
 /* GET current post number. */

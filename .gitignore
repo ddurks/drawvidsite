@@ -1,4 +1,5 @@
 routes/db.js
+routes/passhash.js
 node_modules/
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

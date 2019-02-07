@@ -1,3 +1,4 @@
+var HOST = 'http://localhost:3000/'
 function stringToArrayBuffer(string) {
     var encoder = new TextEncoder("utf-8");
     return encoder.encode(string);
@@ -23,18 +24,27 @@ function upload() {
         var arrayString = "[";
         var intArray = new Uint8Array(hash);
         for(i = 0; i < intArray.length; i++) {
-            arrayString = arrayString + intArray[i] + ", ";
+            arrayString = arrayString + intArray[i];
+            if (i != intArray.length - 1) {
+                arrayString = arrayString + ", ";
+            }
         }
         arrayString = arrayString + "]";
 
-        var currentHash = new Uint8Array(hash);
-        console.log(arrayString);
-        if (arraysEqual(currentHash, passwordHash)) {
-            console.log("success");
-        } else {
-            console.log(currentHash);
-            console.log(passwordHash);
+        let fetchData = {
+            method: 'POST',
+            body: JSON.stringify({ passhash : arrayString }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
         }
+        fetch(HOST + 'check-password', fetchData)
+        .then(response => response)
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => console.error(error));
     })
     .catch(function(err){
         console.error(err);
