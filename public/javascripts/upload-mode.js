@@ -1,4 +1,4 @@
-var HOST = 'http://localhost:3000/'
+var HOST = 'http://drawvid.com/'
 function stringToArrayBuffer(string) {
     var encoder = new TextEncoder("utf-8");
     return encoder.encode(string);
@@ -10,48 +10,54 @@ function arrayBufferToString(array) {
 
 var password;
 
-function upload() {
-    password = document.getElementById('textInput').value;
 
-    window.crypto.subtle.digest(
-        {
-            name: "SHA-512",
-        },
-        stringToArrayBuffer(password) //The data you want to hash as an ArrayBuffer
-    )
-    .then(function(hash){
-        //returns the hash as an ArrayBuffer
-        var arrayString = "[";
-        var intArray = new Uint8Array(hash);
-        for(i = 0; i < intArray.length; i++) {
-            arrayString = arrayString + intArray[i];
-            if (i != intArray.length - 1) {
-                arrayString = arrayString + ", ";
-            }
+$(document).ready(function(){
+    $('#uploadButton').click(function() {
+        if ( $('#uploadForm').length != 0 ) {
+            console.log("submitting image");
+            $('#uploadForm').submit();
         }
-        arrayString = arrayString + "]";
+        password = $('#textInput').val();
+        console.log('password:' + password);
+        var form = $(this);
 
-        let fetchData = {
-            method: 'POST',
-            body: JSON.stringify({ passhash : arrayString }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+        window.crypto.subtle.digest(
+            {
+                name: "SHA-512",
+            },
+            stringToArrayBuffer(password) //The data you want to hash as an ArrayBuffer
+        )
+        .then(function(hash){
+            //returns the hash as an ArrayBuffer
+            var arrayString = "[";
+            var intArray = new Uint8Array(hash);
+            for(i = 0; i < intArray.length; i++) {
+                arrayString = arrayString + intArray[i];
+                if (i != intArray.length - 1) {
+                    arrayString = arrayString + ", ";
+                }
             }
-        }
-        fetch(HOST + 'check-password', fetchData)
-        .then(response => response)
-        .then(data => {
-            console.log(data);
+            arrayString = arrayString + "]";
+
+            let fetchData = {
+                method: 'POST',
+                body: JSON.stringify({ passhash : arrayString }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+            fetch(HOST + 'check-password', fetchData)
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                $('#upload-area').html(data);
+            })
+            .catch(error => console.error(error));
+            
         })
-        .catch(error => console.error(error));
-    })
-    .catch(function(err){
-        console.error(err);
+        .catch(function(err){
+            console.error(err);
+        });
     });
-};
-
-
-window.onload = async () => {
-    upload();
-};
+});
