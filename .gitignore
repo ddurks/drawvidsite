@@ -1,3 +1,4 @@
+routes/aws.js
 routes/db.js
 routes/passhash.js
 node_modules/
