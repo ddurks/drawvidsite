@@ -1,37 +1,8 @@
 var express = require('express');
-var multer  = require('multer');
-var AWS = require('aws-sdk');
-var fs = require('fs');
-var moment = require('moment');
-var twit = require('twit');
-const upload = multer({ dest: './uploads' });
 var router = express.Router();
 var db = require('./db');
-var passwordHash = require('./passhash');
-var AWScredentials = require('./aws');
-var twitconfig = require('./twit');
 
 var r_p = 0;
-
-AWS.config.update({
-    accessKeyId: AWScredentials.ACCESSKEY,
-    secretAccessKey: AWScredentials.SECRET
-});
-
-var s3 = new AWS.S3();
-
-var t = new twit(twitconfig);
-
-function arraysEqual(arr1, arr2) {
-  if(arr1.length !== arr2.length)
-      return false;
-  for(var i = arr1.length; i--;) {
-      if(arr1[i] !== arr2[i])
-          return false;
-  }
-
-  return true;
-}
 
 /* GET site pages */
 /*================*/
