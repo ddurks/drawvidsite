@@ -47,7 +47,7 @@ $(document).ready(function(){
                     'Content-Type': 'application/json'
                 }
             }
-            fetch(HOST + 'check-password', fetchData)
+            fetch(HOST + '420/check-password', fetchData)
             .then(response => response.text())
             .then(data => {
                 console.log(data);
