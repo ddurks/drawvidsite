@@ -3,12 +3,24 @@ extends layout
 block scripts
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
     script(src='/javascripts/upload-mode.js')
+    script(src='/javascripts/hashes.js')
 
 block content
     h1(id='boxed-title') upload
-    div(id='upload-area') #{message}
+    br
+    label(for='replyTweetID') reply tweet link:
+    br
+    input(type='text', id='replyTweetID')
+    br
+    label(for='tweetText') tweet text:
+    br
+    input(type='text', id='tweetText')
     br
     br
-    input(type='text', id='textInput')
+    div(id='upload-area') 
+    br    
+    label(for='textInput') #{message}
+    br
+    input(type='password', id='textInput')
     br
     input(id='uploadButton', value='upload', type='button')

@@ -10,6 +10,7 @@ function arrayBufferToString(array) {
 
 var password;
 
+var replyTweetLink, replyTweetUserName, replyTweetID, tweetText;
 
 $(document).ready(function(){
     $('#uploadButton').click(function() {
@@ -18,46 +19,32 @@ $(document).ready(function(){
             $('#uploadForm').submit();
         }
         password = $('#textInput').val();
-        console.log('password:' + password);
+        replyTweetLink = $('#replyTweetID').val();
+        tweetText = $('#tweetText').val();
         var form = $(this);
 
-        window.crypto.subtle.digest(
-            {
-                name: "SHA-512",
-            },
-            stringToArrayBuffer(password) //The data you want to hash as an ArrayBuffer
-        )
-        .then(function(hash){
-            //returns the hash as an ArrayBuffer
-            var arrayString = "[";
-            var intArray = new Uint8Array(hash);
-            for(i = 0; i < intArray.length; i++) {
-                arrayString = arrayString + intArray[i];
-                if (i != intArray.length - 1) {
-                    arrayString = arrayString + ", ";
-                }
-            }
-            arrayString = arrayString + "]";
+        var sha512 = new Hashes.SHA512().hex(password); //The data you want to hash as an ArrayBuffer
 
-            let fetchData = {
-                method: 'POST',
-                body: JSON.stringify({ passhash : arrayString }),
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
+        console.log(sha512);
+        var parts = replyTweetLink.split('/');
+        replyTweetUserName = parts[3];
+        replyTweetID = parts[5];
+
+        let fetchData = {
+            method: 'POST',
+            body: JSON.stringify({ passhash : sha512, replyTweetID : replyTweetID, replyTweetUserName : replyTweetUserName, tweetText : tweetText }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
-            fetch(HOST + '420/check-password', fetchData)
-            .then(response => response.text())
-            .then(data => {
-                console.log(data);
-                $('#upload-area').html(data);
-            })
-            .catch(error => console.error(error));
-            
+        }
+        fetch(HOST + '420/check-password', fetchData)
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            $('#upload-area').html(data);
         })
-        .catch(function(err){
-            console.error(err);
-        });
+        .catch(error => console.error(error));
+
     });
 });

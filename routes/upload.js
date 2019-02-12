@@ -20,17 +20,9 @@ var s3 = new AWS.S3();
 
 var t = new twit(twitconfig);
 
-function arraysEqual(arr1, arr2) {
-    if(arr1.length !== arr2.length) {
-        return false;
-    }  
-    for(var i = arr1.length; i--;) {
-        if(arr1[i] !== arr2[i]) {
-            return false;
-        }
-    }
-    return true;
-}
+var tweetText = "";
+var replyTweetID = "";
+var replyTweetUserName = "";
 
 // GET form for choosing uploads
 router.get('/upload-form', function(req, res, next) {
@@ -39,13 +31,19 @@ router.get('/upload-form', function(req, res, next) {
 
 // GET upload page
 router.get('/upload-mode', function(req, res, next) {
-  res.render('upload-mode', { title: 'drawvid.com: upload' , message: "password:"});
+  res.render('upload-mode', { title: 'drawvid.com: upload' , message: "password*:"});
 });
 
 // POST check password
 router.post('/check-password', function(req, res, next) {
-  var passhash = JSON.parse(req.body.passhash);
-  if (arraysEqual(passhash, passwordHash)) {
+  tweetText = req.body.tweetText;
+  replyTweetID = req.body.replyTweetID;
+  if (req.body.replyTweetUserName != null) {
+    replyTweetUserName = "@" + req.body.replyTweetUserName + " ";
+  }
+  var passhash = req.body.passhash;
+
+  if (passhash === passwordHash) {
     console.log("success");
     res.render('upload-form', {});
   } else {
@@ -90,7 +88,11 @@ router.post('/upload', upload.single('myFile'), (req, res) => {
                 error = true;
 
               } else {
-                var params = { status: 'test', media_ids: [media.media_id_string] }
+                var params = { 
+                  status: replyTweetUserName + tweetText, 
+                  media_ids: [media.media_id_string],
+                  in_reply_to_status_id: "" + replyTweetID
+                }
                 // post media to twitter
                 t.post('statuses/update', params, function (err, tweet, response) {
                   if (err) {
