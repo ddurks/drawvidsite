@@ -101,58 +101,67 @@ router.post('/upload', upload.single('myFile'), (req, res) => {
 
                   } else {
                     console.log('successsfully tweeted post');
-                    tweet_link = tweet.id_str;
-                    var params = {
-                      Bucket: AWScredentials.S3BUCKET,
-                      Key: req.file.originalname,
-                      ACL: 'public-read',
-                      Body: image_data
-                    };
-                    // upload to s3 bucket
-                    s3.putObject(params, function (perr, pres) {
-                      if (perr) {
-                        console.error(perr);
+                    fs.readFile(req.file.path, (err, image_data) => {
+                      if (err) {
+                        console.error(err);
                         error = true;
-                        
+                
                       } else {
-                        console.log('file uploaded successfully to s3');
-                        
-                        // determine next id number
-                        db.one('SELECT * FROM posts ORDER BY id DESC LIMIT 1')
-                        .then(function (data) {
-                          var nextid = data.id + 1;
-                          
-                          // add post info to postgres
-                          db.one(`INSERT INTO posts (id, image, text, created_date, link) VALUES ( ${nextid}, '${req.file.originalname}', '${req.file.originalname}', '${moment().format()}', 'http://twitter.com/statuses/${tweet_link}' ) RETURNING link`)
-                          .then(function (data) {
-                            console.log("new post link: " + data.link);
-                            fs.unlink(req.file.path, (err) => {
-                              if (err) {
-                                console.error(err);
-                                error = true;
+                        tweet_link = tweet.id_str;
+                        var params = {
+                          Bucket: AWScredentials.S3BUCKET,
+                          Key: req.file.originalname,
+                          ACL: 'public-read',
+                          Body: image_data,
+                          ContentType: 'image/png'
+                        };
+                        // upload to s3 bucket
+                        s3.putObject(params, function (perr, pres) {
+                          if (perr) {
+                            console.error(perr);
+                            error = true;
+                            
+                          } else {
+                            console.log('file uploaded successfully to s3');
+                            
+                            // determine next id number
+                            db.one('SELECT * FROM testposts ORDER BY id DESC LIMIT 1')
+                            .then(function (data) {
+                              var nextid = data.id + 1;
+                              
+                              // add post info to postgres
+                              db.one(`INSERT INTO testposts (id, image, text, created_date, link) VALUES ( ${nextid}, '${req.file.originalname}', '${req.file.originalname}', '${moment().format()}', 'http://twitter.com/statuses/${tweet_link}' ) RETURNING link`)
+                              .then(function (data) {
+                                console.log("new post link: " + data.link);
+                                fs.unlink(req.file.path, (err) => {
+                                  if (err) {
+                                    console.error(err);
+                                    error = true;
 
-                              } else {
-                                console.log( req.file.originalname + ' (' + req.file.path + ') was deleted locally');
+                                  } else {
+                                    console.log( req.file.originalname + ' (' + req.file.path + ') was deleted locally');
 
-                                // render result to webpage
-                                if (error) {
-                                  res.render('upload-mode', { title: 'drawvid.com: upload' , message: "failure! fuck!"});
-                                } else {
-                                  res.render('upload-mode', { title: 'drawvid.com: upload' , message: req.file.originalname + ' was successfully uploaded.'});
-                                }
-                              }
+                                    // render result to webpage
+                                    if (error) {
+                                      res.render('upload-mode', { title: 'drawvid.com: upload' , message: "failure! fuck!"});
+                                    } else {
+                                      res.render('upload-mode', { title: 'drawvid.com: upload' , message: req.file.originalname + ' was successfully uploaded.'});
+                                    }
+                                  }
+                                });
+                              })
+                              .catch(function (error) {
+                                console.error(error);
+                              });
+          
+                            })
+                            .catch(function (error) {
+                              console.error(error);
                             });
-                          })
-                          .catch(function (error) {
-                            console.error(error);
-                          });
-      
-                        })
-                        .catch(function (error) {
-                          console.error(error);
+                          }
+
                         });
                       }
-
                     });
                   }
                   
