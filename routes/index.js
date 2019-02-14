@@ -66,7 +66,7 @@ router.get('/random', function(req, res, next) {
     res.json({ "link":"https://s3.amazonaws.com/drawvid-posts/" + data.image, "num": data.id });
   })
   .catch(function (error) {
-    console.log('ERROR:', error)
+    console.log('ERROR:', error);
   });
 });
 
@@ -88,7 +88,7 @@ router.get('/next', function(req, res, ext) {
     res.json({ "link":"https://s3.amazonaws.com/drawvid-posts/" + data.image, "num": data.id });
   })
   .catch(function (error) {
-    console.log('ERROR:', error)
+    console.log('ERROR:', error);
   });
 });
 

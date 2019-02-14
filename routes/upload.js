@@ -10,6 +10,7 @@ var db = require('./db');
 var passwordHash = require('./passhash');
 var AWScredentials = require('./aws');
 var twitconfig = require('./twit');
+const DB_NAME = 'testposts';
 
 AWS.config.update({
     accessKeyId: AWScredentials.ACCESSKEY,
@@ -19,6 +20,17 @@ AWS.config.update({
 var s3 = new AWS.S3();
 
 var t = new twit(twitconfig);
+
+var drawvidpost = {
+  filename : "",
+  text: "",
+  link: "",
+  date: "",
+  upload_path: ""
+}
+
+var tweetCheck = false;
+var siteCheck = false;
 
 var tweetText = "";
 var replyTweetID = "";
@@ -42,6 +54,8 @@ router.post('/check-password', function(req, res, next) {
     replyTweetUserName = "@" + req.body.replyTweetUserName + " ";
   }
   var passhash = req.body.passhash;
+  tweetCheck = req.body.tweetCheck;
+  siteCheck = req.body.siteCheck;
 
   if (passhash === passwordHash) {
     console.log("success");
@@ -59,124 +73,154 @@ router.post('/upload', upload.single('myFile'), (req, res) => {
   if (!req.file) {
     console.log('no file uploaded');
     res.redirect('420/upload-mode');
-
   } else {
-    console.log('posting ' + req.file.originalname + '...');
-    var tweet_link = null;
-    // load uploaded file
-    fs.readFile(req.file.path, { encoding: 'base64' }, (err, image_data) => {
-      if (err) {
-        console.error(err);
-        error = true;
-
+    console.log('received: ' + drawvidpost.filename );
+    drawvidpost.filename = req.file.originalname;
+    if (tweetText != "") {
+      drawvidpost.text = tweetText;
+    } else {
+      drawvidpost.text = drawvidpost.filename;
+    }
+    drawvidpost.date = moment().format();
+    drawvidpost.upload_path = req.file.path;
+    var success_string = "";
+    var failure_string = "";
+    
+    if (tweetCheck) {
+      if (uploadToTwitter()) {
+        success_string += "twitter ";
       } else {
-        // upload media to twitter
-        t.post('media/upload', {media: image_data}, function(error, media, response) {
-          if (error) {
-            console.error(err);
-            error = true;
-
-          } else {
-            var meta_params = {
-              alt_text: { text: req.file.originalname },
-              media_id: media.media_id_string
-            }
-            // create twitter metadata for media
-            t.post('media/metadata/create', meta_params, function (err, data, response) {
-              if (err) {
-                console.error(err);
-                error = true;
-
-              } else {
-                var params = { 
-                  status: replyTweetUserName + tweetText, 
-                  media_ids: [media.media_id_string],
-                  in_reply_to_status_id: "" + replyTweetID
-                }
-                // post media to twitter
-                t.post('statuses/update', params, function (err, tweet, response) {
-                  if (err) {
-                    console.error(err);
-                    error = true;
-
-                  } else {
-                    console.log('successsfully tweeted post');
-                    fs.readFile(req.file.path, (err, image_data) => {
-                      if (err) {
-                        console.error(err);
-                        error = true;
-                
-                      } else {
-                        tweet_link = tweet.id_str;
-                        var filenamelist = req.file.originalname.split('.');
-                        var params = {
-                          Bucket: AWScredentials.S3BUCKET,
-                          Key: req.file.originalname,
-                          ACL: 'public-read',
-                          Body: image_data,
-                          ContentType: ('image/' + filenamelist[1])
-                        };
-                        // upload to s3 bucket
-                        s3.putObject(params, function (perr, pres) {
-                          if (perr) {
-                            console.error(perr);
-                            error = true;
-                            
-                          } else {
-                            console.log('file uploaded successfully to s3');
-                            
-                            // determine next id number
-                            db.one('SELECT * FROM posts ORDER BY id DESC LIMIT 1')
-                            .then(function (data) {
-                              var nextid = data.id + 1;
-                              
-                              // add post info to postgres
-                              db.one(`INSERT INTO posts (id, image, text, created_date, link) VALUES ( ${nextid}, '${req.file.originalname}', '${req.file.originalname}', '${moment().format()}', 'http://twitter.com/statuses/${tweet_link}' ) RETURNING link`)
-                              .then(function (data) {
-                                console.log("new post link: " + data.link);
-                                fs.unlink(req.file.path, (err) => {
-                                  if (err) {
-                                    console.error(err);
-                                    error = true;
-
-                                  } else {
-                                    console.log( req.file.originalname + ' (' + req.file.path + ') was deleted locally');
-
-                                    // render result to webpage
-                                    if (error) {
-                                      res.render('upload-mode', { title: 'drawvid.com: upload' , message: "failure! fuck!"});
-                                    } else {
-                                      res.render('upload-mode', { title: 'drawvid.com: upload' , message: req.file.originalname + ' was successfully uploaded.'});
-                                    }
-                                  }
-                                });
-                              })
-                              .catch(function (error) {
-                                console.error(error);
-                              });
-          
-                            })
-                            .catch(function (error) {
-                              console.error(error);
-                            });
-                          }
-
-                        });
-                      }
-                    });
-                  }
-                  
-                });
-              }
-              
-            });
-          }
-          
-        });
+        failure_string += "twitter ";
       }
-
-    });
+    }
+    if (siteCheck) {
+      if (uploadToWebsite()) {
+        success_string += "site ";
+      } else {
+        failure_string += "site ";
+      }
+    } 
+    
+    res.render('upload-mode', { title: 'drawvid.com: upload' , message: success_string + " | " + failure_string});
   } 
 });
 
+function uploadToTwitter() {
+  console.log('tweeting...');
+  // load uploaded file
+  fs.readFile(drawvidpost.upload_path, { encoding: 'base64' }, (err, image_data) => {
+    if (err) {
+      console.error(err);
+      return false;
+
+    } else {
+      // upload media to twitter
+      t.post('media/upload', {media: image_data}, function(error, media, response) {
+        if (error) {
+          console.error(err);
+          return false;
+
+        } else {
+          var meta_params = {
+            alt_text: { text: drawvidpost.filename },
+            media_id: media.media_id_string
+          }
+          // create twitter metadata for media
+          t.post('media/metadata/create', meta_params, function (err, data, response) {
+            if (err) {
+              console.error(err);
+              return false;
+
+            } else {
+              var params = { 
+                status: replyTweetUserName + tweetText, 
+                media_ids: [media.media_id_string],
+                in_reply_to_status_id: "" + replyTweetID
+              }
+              // post media to twitter
+              t.post('statuses/update', params, function (err, tweet, response) {
+                if (err) {
+                  console.error(err);
+                  return false;
+
+                } else {
+                  console.log('successsfully tweeted!');
+                  drawvidpost.link = 'http://twitter.com/statuses/' + tweet.id_str;
+                  return true;
+                }
+                
+              });
+            }
+            
+          });
+        }
+        
+      });
+    }
+
+  });
+}
+
+function uploadToWebsite() {
+  console.log("uploading to db and s3...")
+  fs.readFile(drawvidpost.upload_path, (err, image_data) => {
+    if (err) {
+      console.error(err);
+      return false;
+
+    } else {
+      var filenamelist = drawvidpost.filename.split('.');
+      var params = {
+        Bucket: AWScredentials.S3BUCKET,
+        Key: drawvidpost.filename,
+        ACL: 'public-read',
+        Body: image_data,
+        ContentType: ('image/' + filenamelist[1])
+      };
+      // upload to s3 bucket
+      s3.putObject(params, function (perr, pres) {
+        if (perr) {
+          console.error(perr);
+          return false;
+          
+        } else {
+          console.log('file uploaded successfully to ' + AWScredentials.S3BUCKET + '!');
+          
+          // determine next id number
+          db.one(`SELECT * FROM ${DB_NAME} ORDER BY id DESC LIMIT 1`)
+          .then(function (data) {
+            var nextid = data.id + 1;
+            
+            // add post info to postgres
+            db.one(`INSERT INTO ${DB_NAME} (id, image, text, created_date, link) VALUES ( ${nextid}, '${drawvidpost.filename}', '${drawvidpost.text}', '${drawvidpost.date}', '${drawvidpost.link}' ) RETURNING link`)
+            .then(function (data) {
+              console.log("new post link: " + data.link);
+              fs.unlink(drawvidpost.upload_path, (err) => {
+                if (err) {
+                  console.error(err);
+                  return false;
+
+                } else {
+                  console.log('file uploaded successfully to ' + DB_NAME + '!');
+                  console.log( drawvidpost.filename + ' (' + drawvidpost.upload_path + ') was deleted locally');
+                  return true;
+                }
+              });
+            })
+            .catch(function (error) {
+              console.error(error);
+              return false;
+            });
+
+          })
+          .catch(function (error) {
+            console.error(error);
+            return false;
+          });
+        }
+
+      });
+    }
+  });
+}
 module.exports = router;

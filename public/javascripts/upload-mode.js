@@ -1,4 +1,3 @@
-var HOST = 'http://drawvid.com/'
 function stringToArrayBuffer(string) {
     var encoder = new TextEncoder("utf-8");
     return encoder.encode(string);
@@ -9,15 +8,16 @@ function arrayBufferToString(array) {
 }
 
 var password;
+var tweetCheck = false;
+var siteCheck = false;
 
 var replyTweetLink, replyTweetUserName, replyTweetID, tweetText;
 
 $(document).ready(function(){
     $('#uploadButton').click(function() {
-        if ( $('#uploadForm').length != 0 ) {
-            console.log("submitting image");
-            $('#uploadForm').submit();
-        }
+        tweetCheck = $('#tweetCheck').prop('checked');
+        siteCheck = $('#siteCheck').prop('checked');
+        console.log(tweetCheck, siteCheck);
         password = $('#textInput').val();
         replyTweetLink = $('#replyTweetID').val();
         tweetText = $('#tweetText').val();
@@ -32,13 +32,13 @@ $(document).ready(function(){
 
         let fetchData = {
             method: 'POST',
-            body: JSON.stringify({ passhash : sha512, replyTweetID : replyTweetID, replyTweetUserName : replyTweetUserName, tweetText : tweetText }),
+            body: JSON.stringify({ passhash : sha512, replyTweetID : replyTweetID, replyTweetUserName : replyTweetUserName, tweetText : tweetText, tweetCheck : tweetCheck, siteCheck : siteCheck }),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         }
-        fetch(HOST + '420/check-password', fetchData)
+        fetch('check-password', fetchData)
         .then(response => response.text())
         .then(data => {
             console.log(data);
@@ -46,5 +46,13 @@ $(document).ready(function(){
         })
         .catch(error => console.error(error));
 
+        if (tweetCheck || siteCheck) {
+            console.log('wtf');
+        }
+
+        if ( $('#uploadForm').length != 0 && (tweetCheck || siteCheck) ) {
+            console.log("submitting image");
+            $('#uploadForm').submit();
+        }
     });
 });

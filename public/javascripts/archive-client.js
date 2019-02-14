@@ -1,7 +1,5 @@
-const HOST = 'http://drawvid.com/';
-
 window.onload = async () => {
-    const response = await fetch(HOST + 'archive/allposts');
+    const response = await fetch('archive/allposts');
     const myJson = await response.json(); 
 
     var stringjson = JSON.stringify(myJson);
@@ -24,7 +22,7 @@ function makeList(array) {
         var text = document.createTextNode( array[i].image + " - " + array[i].created_date.substr(0,10));
         a.appendChild(text);
         a.title = array[i].created_date.substr(0,9);
-        a.href = HOST + "post?name=" + array[i].image;
+        a.href = "post?name=" + array[i].image;
         var li = document.createElement('li');
         li.appendChild(a);
         li.className = 'archive-item';
