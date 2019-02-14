@@ -108,12 +108,13 @@ router.post('/upload', upload.single('myFile'), (req, res) => {
                 
                       } else {
                         tweet_link = tweet.id_str;
+                        var filenamelist = req.file.originalname.split('.');
                         var params = {
                           Bucket: AWScredentials.S3BUCKET,
                           Key: req.file.originalname,
                           ACL: 'public-read',
                           Body: image_data,
-                          ContentType: 'image/png'
+                          ContentType: ('image/' + filenamelist[1])
                         };
                         // upload to s3 bucket
                         s3.putObject(params, function (perr, pres) {
