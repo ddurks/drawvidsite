@@ -125,12 +125,12 @@ router.post('/upload', upload.single('myFile'), (req, res) => {
                             console.log('file uploaded successfully to s3');
                             
                             // determine next id number
-                            db.one('SELECT * FROM testposts ORDER BY id DESC LIMIT 1')
+                            db.one('SELECT * FROM posts ORDER BY id DESC LIMIT 1')
                             .then(function (data) {
                               var nextid = data.id + 1;
                               
                               // add post info to postgres
-                              db.one(`INSERT INTO testposts (id, image, text, created_date, link) VALUES ( ${nextid}, '${req.file.originalname}', '${req.file.originalname}', '${moment().format()}', 'http://twitter.com/statuses/${tweet_link}' ) RETURNING link`)
+                              db.one(`INSERT INTO posts (id, image, text, created_date, link) VALUES ( ${nextid}, '${req.file.originalname}', '${req.file.originalname}', '${moment().format()}', 'http://twitter.com/statuses/${tweet_link}' ) RETURNING link`)
                               .then(function (data) {
                                 console.log("new post link: " + data.link);
                                 fs.unlink(req.file.path, (err) => {
