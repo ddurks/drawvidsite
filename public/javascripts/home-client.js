@@ -5,7 +5,7 @@ var current_post_number;
 var r_p;
 
 window.onload = async () => {
-    const response = await fetch('current_post');
+    const response = await fetch('most_recent_post');
     const myJson = await response.json();
      
     console.log(myJson);

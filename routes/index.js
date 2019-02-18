@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('./db');
 
-var r_p = 0;
+var most_recent_postnum = 0;
 
 /* GET site pages */
 /*================*/
@@ -36,8 +36,8 @@ router.get('/current_post', function(req, res, next) {
   
   db.one('SELECT * FROM posts ORDER BY id DESC LIMIT 1')
   .then(function (data) {
-    r_p = data.id;
-    res.json({"current_num": r_p});
+    most_recent_postnum = data.id;
+    res.json({"current_num": most_recent_postnum});
   })
   .catch(function (error) {
     console.log('ERROR:', error);
@@ -59,14 +59,14 @@ router.get('/post', function(req, res, next) {
 
 /* GET random drawing for home page. */
 router.get('/random', function(req, res, next) {
-  var random_postnum = Math.floor((Math.random() * r_p));
+  var random_postnum = Math.floor((Math.random() * most_recent_postnum));
   
   db.one('SELECT * FROM POSTS WHERE id=' + random_postnum)
   .then(function (data) {
     res.json({ "link":"https://s3.amazonaws.com/drawvid-posts/" + data.image, "num": data.id });
   })
   .catch(function (error) {
-    console.log('ERROR:', error);
+    console.log('ERROR:', error)
   });
 });
 
