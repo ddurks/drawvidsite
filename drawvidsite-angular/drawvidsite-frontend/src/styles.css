@@ -1,0 +1,96 @@
+/* You can add global styles to this file, and also import other style files */
+title {
+    font: "Times New Roman";
+    text-align: center;
+  }
+  img.homepost {
+    max-width: 60%;
+    height: auto;
+    max-height: 75%;
+  }
+  body {
+    text-align: center;
+    font-weight: bold;
+    padding-left: 0;
+    font-family: "Times New Roman";
+    color: black;
+    background-color:whitesmoke;
+  }
+  ul.navbar {
+    border-width:1px 0;
+    list-style:none;
+    margin:0;
+    padding:0;
+    text-align:center;
+  }
+  h1 {
+    font-family: "Times New Roman" 
+  }
+  ul.navbar li {
+    display: inline;
+    margin: 0.5em 0.4em;
+    padding: 0.3em;
+    background-color: rgb(205, 220, 235);
+    border-radius: 15px;
+  }
+  ul.navbar a {
+    display: inline-block;
+    padding: 10px;
+  }
+  ul.navbar a:hover, ul.navbar a:visited, ul.navbar a:link, ul.navbar a:active
+  {
+    text-decoration: none;
+  }
+  ul.body-list {
+    padding: 0;
+    list-style-type: none;
+  }
+  ul.body-list li a {
+    text-decoration: none;
+  }
+  .home-title {
+    color: yellow;
+    text-decoration: underline;
+  }
+  .archive-title {
+    color: rgb(235, 86, 86);
+  }
+  .about-title {
+    color: green;
+  }
+  .etc-title {
+    color: blue;
+  }
+  address {
+    margin-top: 1em;
+    padding-top: 1em;
+    border-top: thin dotted 
+  }
+  .prev-next {
+    color: black;
+    background-color: rgb(205, 220, 235);
+    border: none;
+    font-weight: bold; 
+  }
+  #random {
+    background-color: pink;
+    border-radius: 10px;
+    font-weight: bold;
+  }
+  #drawvid-display {
+    max-width: 15%;
+    height: auto;
+    max-height: 50%;
+  }
+  #boxed-title {
+    text-align: center;
+    vertical-align: middle;
+    background: rgb(205, 220, 235);
+  }
+  .bolded-body-text {
+    font-weight: bold;
+  }
+  canvas {
+    border: 1em solid rgb(170, 238, 218);
+    border-radius: 10px;
+  }
