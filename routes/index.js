@@ -32,12 +32,16 @@ router.get('/small-man', function(req, res, next) {
 });
 
 /* GET current post number. */
-router.get('/current_post', function(req, res, next) {
+router.get('/most_recent_post', function(req, res, next) {
   
   db.one('SELECT * FROM posts ORDER BY id DESC LIMIT 1')
   .then(function (data) {
     most_recent_postnum = data.id;
-    res.json({"current_num": most_recent_postnum});
+    var img = data.image;
+    var txt = data.text;
+    var link = data.link;
+    var date = data.created_date;
+    res.json({"current_num": most_recent_postnum, "image" : img, "text" : txt, "link": link, "date" : date});
   })
   .catch(function (error) {
     console.log('ERROR:', error);
@@ -63,8 +67,12 @@ router.get('/random', function(req, res, next) {
   
   db.one('SELECT * FROM POSTS WHERE id=' + random_postnum)
   .then(function (data) {
-    res.json({ "link":"https://s3.amazonaws.com/drawvid-posts/" + data.image, "num": data.id });
-  })
+    var id = data.id;
+    var img = data.image;
+    var txt = data.text;
+    var link = data.link;
+    var date = data.created_date;
+    res.json({"current_num": id, "image" : img, "text" : txt, "link": link, "date" : date});  })
   .catch(function (error) {
     console.log('ERROR:', error)
   });
@@ -74,7 +82,12 @@ router.get('/prev', function(req, res, ext) {
   var prev_post_num = Number(req.query.curr) - 1;
   db.one('SELECT * FROM POSTS WHERE id=' + prev_post_num)
   .then(function (data) {
-    res.json({ "link":"https://s3.amazonaws.com/drawvid-posts/" + data.image, "num": data.id });
+    var id = data.id;
+    var img = data.image;
+    var txt = data.text;
+    var link = data.link;
+    var date = data.created_date;
+    res.json({"current_num": id, "image" : img, "text" : txt, "link": link, "date" : date});
   })
   .catch(function (error) {
     console.log('ERROR:', error)
@@ -85,7 +98,12 @@ router.get('/next', function(req, res, ext) {
   var next_post_num = Number(req.query.curr) + 1;
   db.one('SELECT * FROM POSTS WHERE id=' + next_post_num)
   .then(function (data) {
-    res.json({ "link":"https://s3.amazonaws.com/drawvid-posts/" + data.image, "num": data.id });
+    var id = data.id;
+    var img = data.image;
+    var txt = data.text;
+    var link = data.link;
+    var date = data.created_date;
+    res.json({"current_num": id, "image" : img, "text" : txt, "link": link, "date" : date});
   })
   .catch(function (error) {
     console.log('ERROR:', error);
