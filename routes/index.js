@@ -32,7 +32,7 @@ router.get('/small-man', function(req, res, next) {
 });
 
 /* GET current post number. */
-router.get('/current_post', function(req, res, next) {
+router.get('/most_recent_post', function(req, res, next) {
   
   db.one('SELECT * FROM posts ORDER BY id DESC LIMIT 1')
   .then(function (data) {
@@ -60,6 +60,7 @@ router.get('/post', function(req, res, next) {
 /* GET random drawing for home page. */
 router.get('/random', function(req, res, next) {
   var random_postnum = Math.floor((Math.random() * most_recent_postnum));
+  console.log(random_postnum);
   
   db.one('SELECT * FROM POSTS WHERE id=' + random_postnum)
   .then(function (data) {
