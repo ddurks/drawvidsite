@@ -3,6 +3,7 @@ routes/aws.js
 routes/db.js
 routes/passhash.js
 node_modules/
+uploads/
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

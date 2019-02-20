@@ -2,6 +2,7 @@ extends layout
 
 block scripts
   script(src='/javascripts/archive-client.js')
+  link(rel='stylesheet', href='/stylesheets/modal.css')
 
 block content
   p
@@ -9,3 +10,9 @@ block content
   div(class="archive-div")
     h1(class='archive-title', id='boxed-title') archive
     ul(id='archive-list', class='body-list')
+    
+  // The Modal
+  #myModal.modal
+    span.close &times;
+    img#img01.modal-content
+    #caption

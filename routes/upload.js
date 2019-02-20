@@ -10,7 +10,7 @@ var db = require('./db');
 var passwordHash = require('./passhash');
 var AWScredentials = require('./aws');
 var twitconfig = require('./twit');
-const DB_NAME = 'testposts';
+const DB_NAME = 'posts';
 
 AWS.config.update({
     accessKeyId: AWScredentials.ACCESSKEY,

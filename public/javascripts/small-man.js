@@ -45,7 +45,6 @@ var Man = {
     },
 
     move: function() {
-        console.log(this.posx, this.posy);
         if (this.direction == 0) {
             if (this.posy > CANVAS_HEIGHT - scaledHeight ) { 
                 this.posy = this.posy--;
