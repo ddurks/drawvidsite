@@ -4,6 +4,17 @@ var db = require('./db');
 
 var most_recent_postnum = 0;
 
+function createPostObject(data) {
+  var current_post = {
+    id: data.id,
+    image: data.image,
+    text: data.text,
+    date: data.created_date,
+    link: data.link
+  }
+  return current_post;
+}
+
 /* GET site pages */
 /*================*/
 
@@ -36,13 +47,9 @@ router.get('/most_recent_post', function(req, res, next) {
   
   db.one('SELECT * FROM posts ORDER BY id DESC LIMIT 1')
   .then(function (data) {
-    var id = data.id;
-    var img = data.image;
-    var txt = data.text;
-    var link = data.link;
-    var date = data.created_date;
-    most_recent_postnum = id;
-    res.json({"current_num": id, "image" : img, "text" : txt, "link": link, "date" : date});
+    var post = createPostObject(data);
+    most_recent_postnum = post.id;
+    res.json({"id": post.id, "image" : post.image, "text" : post.text, "link": post.link, "date" : post.date});
   })
   .catch(function (error) {
     console.log('ERROR:', error);
@@ -55,12 +62,8 @@ router.get('/post', function(req, res, next) {
   console.log(req.query.name);
   db.one("SELECT * FROM POSTS WHERE id='" + req.query.name + "'")
   .then(function (data) {
-    var id = data.id;
-    var img = data.image;
-    var txt = data.text;
-    var link = data.link;
-    var date = data.created_date;
-    res.json({"id": id, "image" : img, "text" : txt, "link": link, "date" : date});
+    var post = createPostObject(data);
+    res.json({"id": post.id, "image" : post.image, "text" : post.text, "link": post.link, "date" : post.date});
   })
   .catch(function (error) {
     console.log('ERROR:', error);
@@ -74,12 +77,8 @@ router.get('/random', function(req, res, next) {
   
   db.one('SELECT * FROM POSTS WHERE id=' + random_postnum)
   .then(function (data) {
-    var id = data.id;
-    var img = data.image;
-    var txt = data.text;
-    var link = data.link;
-    var date = data.created_date;
-    res.json({"id": id, "image" : img, "text" : txt, "link": link, "date" : date});
+    var post = createPostObject(data);
+    res.json({"id": post.id, "image" : post.image, "text" : post.text, "link": post.link, "date" : post.date});
   })
   .catch(function (error) {
     console.log('ERROR:', error)
@@ -90,12 +89,8 @@ router.get('/prev', function(req, res, ext) {
   var prev_post_num = Number(req.query.curr) - 1;
   db.one('SELECT * FROM POSTS WHERE id=' + prev_post_num)
   .then(function (data) {
-    var id = data.id;
-    var img = data.image;
-    var txt = data.text;
-    var link = data.link;
-    var date = data.created_date;
-    res.json({"id": id, "image" : img, "text" : txt, "link": link, "date" : date});
+    var post = createPostObject(data);
+    res.json({"id": post.id, "image" : post.image, "text" : post.text, "link": post.link, "date" : post.date});
   })
   .catch(function (error) {
     console.log('ERROR:', error)
@@ -106,12 +101,8 @@ router.get('/next', function(req, res, ext) {
   var next_post_num = Number(req.query.curr) + 1;
   db.one('SELECT * FROM POSTS WHERE id=' + next_post_num)
   .then(function (data) {
-    var id = data.id;
-    var img = data.image;
-    var txt = data.text;
-    var link = data.link;
-    var date = data.created_date;
-    res.json({"id": id, "image" : img, "text" : txt, "link": link, "date" : date});
+    var post = createPostObject(data);
+    res.json({"id": post.id, "image" : post.image, "text" : post.text, "link": post.link, "date" : post.date});
   })
   .catch(function (error) {
     console.log('ERROR:', error);

@@ -64,7 +64,7 @@ ul.body-list li a {
 address {
   margin-top: 1em;
   padding-top: 1em;
-  border-top: thin dotted 
+  border-top: thin dotted;
 }
 .prev-next {
   color: black;
@@ -105,4 +105,8 @@ button.archive-button {
 }
 button.archive-button:hover {
   opacity: 0.7;
+}
+.twitter-link {
+  font-weight: bold;
+  font-style: normal;
 }
