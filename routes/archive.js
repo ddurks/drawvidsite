@@ -17,6 +17,7 @@ router.get('/allposts', function(req, res, next) {
   .catch(function (error) {
     console.log('ERROR:', error);
   });
+  
 });
 
 module.exports = router;
