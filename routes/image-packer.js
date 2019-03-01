@@ -33,9 +33,10 @@ var Node = {
 var BinarySearchTree = {
 
   freeRectangles : [],
-  imageRectangles : [],
   canvas_h : null,
   canvas_w : null,
+  root: null,
+  inorder_list: new Array(),
 
   create: function() {
     var tree = Object.create(this);
@@ -46,62 +47,115 @@ var BinarySearchTree = {
   pack: function(images, canvas_width, canvas_height) {
     this.canvas_w = canvas_width;
     this.canvas_h = canvas_height;
-    for (var i = 0; i < images.length; i++) {
-      var rect = Rect.create(null, null, images[i].width, images[i].height);
-      this.imageRectangles[i] = rect;
+    for (var i = 0; i < 5; i++) {
+      var node = Node.create(images[i]);
+      this.insert(node);
     }
-    console.log(this.imageRectangles);
+    console.log(this.get_inorder());
   },
 
-  insert: function(node) {
-    var new_node = Node.create(node);
-
+  insert: function(new_node) {
     if (this.root === null) {
-      this.root = new_node;
+      console.log('inserting canvas as root');
+      var canvasRect = Rect.create(0, 0, this.canvas_w, this.canvas_h);
+      var rootNode = Node.create(null);
+      this.root = rootNode;
     } else {
-      this.insertNode(this.root, new_node);
+      var result = this.insertNode(this.root, new_node);
     }
+    return result;
   },
 
   insertNode: function(node, new_node) {
     var result;
     if (node.left != null) {
+      console.log('left');
       result = this.insertNode(node.left, new_node);
       if (result != null) {
         return result;
       } 
-    } else if (node.right != null) {
+    }
+    if (node.right != null) {
+      console.log('right');
       result = this.insertNode(node.right, new_node);
       if (result != null) {
         return this.insertNode(node.right, new_node);
       }
     } else {
+      if(this.freeRectangles.length === 0) {
+        return null;
+      }
+
+      console.log('evaluating fit');
       if ( (node.image != null) || (node.rect.size < new_node.rect.size) ){
+        console.log(node.rect.size, new_node.rect.size);
+        console.log('doesnt fit');
         return null;
       }
       if ( node.rect.size === new_node.rect.size ) {
+        console.log('perfect fit');
         node = new_node;
         return node;
       } else {
+        console.log('splitting');
         var dw = node.rect.w - new_node.rect.w;
         var dh = node.rect.h - new_node.rect.h;
       }
-    }
-    /*
-    if(new_node.rect.size() < node.rect.size()) {
-      if(node.left === null) {
-        node.left = new_node;
+
+      var freeRect2, freeRect1;
+      console.log('INSERTING:');
+      console.log(new_node);
+      console.log('INTO:');
+      console.log(node);
+      if (dw > dh && dh > 0) {
+        console.log('method 1');
+        freeRect1 = Rect.create(
+          node.rect.x + new_node.rect.w, 
+          node.rect.y, 
+          node.rect.w - (node.rect.x + new_node.rect.w), 
+          new_node.rect.h);
+        freeRect2 = Rect.create(
+          node.rect.x, 
+          node.rect.y + new_node.rect.h, 
+          node.rect.w, 
+          node.rect.h - (node.rect.y + new_node.rect.h));
       } else {
-        this.insertNode(node.left, new_node);
+        console.log('method 2');
+        freeRect1 = Rect.create(
+          node.rect.x + new_node.rect.w, 
+          node.rect.y, 
+          node.rect.w - (node.rect.x + new_node.rect.w), 
+          node.rect.h);
+        freeRect2 = Rect.create(
+          node.rect.x, 
+          node.rect.y + new_node.rect.h, 
+          new_node.rect.w, 
+          node.rect.h - (node.rect.y + new_node.rect.h));
       }
-    } else {
-      if(node.right === null) {
-        node.right = new_node;
-      } else {
-        this.insertNode(node.right, new_node);
+
+      if (node === this.root) {
+        console.log('new root');
+        this.root = new_node
+      }
+      node = new_node;
+      node.left = Node.create(null);
+      node.right = Node.create(null);
+      console.log('parent');
+      console.log(node.rect);
+      console.log('new left child');
+      console.log(node.left.rect);
+      console.log('new right child');
+      console.log(node.right.rect)
+      return node;
+    }
+  },
+
+  selectRectangle(node) {
+    for(var i = 0; i < this.freeRectangles.length; i++) {
+      if ( this.freeRectangles[i].size < node.rect.size) {
+        
       }
     }
-    */
   },
 
   remove: function(node) {
@@ -144,8 +198,16 @@ var BinarySearchTree = {
       {
           this.inorder(node.left);
           console.log(node.rect);
+          this.inorder_list.push(node.rect);
           this.inorder(node.right);
       }
+  },
+
+  get_inorder: function () {
+    console.log("INORDER!!!!!!!!!!!")
+    console.log(this.root);
+    this.inorder(this.root);
+    return this.inorder_list;
   },
 
   preorder: function(node) { 

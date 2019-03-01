@@ -49,12 +49,15 @@ router.get('/gallery', function(req, res, next) {
 router.get('/generate-gallery', function(req, res, next) {
   db.query('SELECT * FROM posts')
   .then(function (data) {
+    res.send(data);
+    /*
     var gallery = generate_gallery(data)
     .then(images => {
-      console.log(images);
+      //console.log(images);
       res.send(images);
     })
     .catch(error => console.error(error));
+    */
   })
   .catch(function (error) {
     console.log('ERROR:', error);
