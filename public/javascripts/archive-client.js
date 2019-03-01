@@ -101,14 +101,27 @@ function makeList(array) {
 
 }
 
-function showModal(poststring) {
+function changeSrc(image_src, change_img) {
+    change_img.src = image_src;
+}
+
+function loadImage(image_src, change_img) {
+    var load_image = new Image();
+    console.log("got here 2");
+    load_image.onload = changeSrc(image_src, change_img);
+    load_image.src = image_src;
+}
+
+function showModal(poststring) { 
     var modal = document.getElementById('myModal');
     var modalImg = document.getElementById("img01");
     var captionText = document.getElementById("caption");
+    console.log("got here");
     modalImg.onload = function() {
-        modal.style.display = "block";
+        modal.style.display = 'block';
+        console.log("got here 1");
+        loadImage('https://s3.amazonaws.com/drawvid-posts/' + poststring, modalImg);
     }
-    modalImg.src = 'https://s3.amazonaws.com/drawvid-posts/' + poststring;
     captionText.innerHTML = poststring;
 }
 

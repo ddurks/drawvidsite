@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('./db');
+var generate_gallery = require('./gallery');
 
 var most_recent_postnum = 0;
 
@@ -40,6 +41,27 @@ router.get('/etc', function(req, res, next) {
 
 router.get('/small-man', function(req, res, next) {
   res.render('small-man', { title: 'drawvid.com: small-man' });
+});
+router.get('/gallery', function(req, res, next) {
+  res.render('gallery', { title: 'drawvid.com: gallery' });
+});
+
+router.get('/generate-gallery', function(req, res, next) {
+  db.query('SELECT * FROM posts')
+  .then(function (data) {
+    res.send(data);
+    /*
+    var gallery = generate_gallery(data)
+    .then(images => {
+      //console.log(images);
+      res.send(images);
+    })
+    .catch(error => console.error(error));
+    */
+  })
+  .catch(function (error) {
+    console.log('ERROR:', error);
+  });
 });
 
 /* GET current post number. */

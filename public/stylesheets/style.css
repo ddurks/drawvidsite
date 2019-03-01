@@ -69,13 +69,17 @@ address {
 .prev-next {
   color: black;
   background-color: rgb(205, 220, 235);
+  padding: 0.75em 1em;
   border: none;
+  border-radius: 15px;
   font-weight: bold; 
 }
 #random {
   background-color: pink;
-  border-radius: 10px;
   font-weight: bold;
+  padding: 0.75em 1em;
+  border: none;
+  border-radius: 15px;
 }
 #drawvid-display {
   max-width: 15%;
@@ -98,7 +102,7 @@ li.archive-item {
   font-size: 70%;
   font-weight: lighter;
 }
-button.archive-button {
+button {
   padding: 0.75em 1em;
   border: none;
   border-radius: 15px;
