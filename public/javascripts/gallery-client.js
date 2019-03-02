@@ -30,7 +30,7 @@ function loadImages(posts) {
                 var canvas_y = Math.floor((Math.random() * CANVAS_WIDTH)) - 40;
                 ctx.drawImage(this, canvas_x, canvas_y);
             }
-            image.src = 'https://s3.us-east-2.amazonaws.com/drawvid-thumbnails/thumb-' + element.image;
+            image.src = element.image;
         });
     })
     .catch(error => console.error(error));

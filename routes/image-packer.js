@@ -33,6 +33,7 @@ var Node = {
 var BinarySearchTree = {
 
   freeRectangles : [],
+  placedImageRects: [],
   canvas_h : null,
   canvas_w : null,
   root: null,
@@ -59,6 +60,7 @@ var BinarySearchTree = {
       console.log('inserting canvas as root');
       var canvasRect = Rect.create(0, 0, this.canvas_w, this.canvas_h);
       var rootNode = Node.create(null);
+      this.freeRectangles.push(canvasRect);
       this.root = rootNode;
     } else {
       var result = this.insertNode(this.root, new_node);
@@ -86,76 +88,93 @@ var BinarySearchTree = {
         return null;
       }
 
-      console.log('evaluating fit');
-      if ( (node.image != null) || (node.rect.size < new_node.rect.size) ){
-        console.log(node.rect.size, new_node.rect.size);
-        console.log('doesnt fit');
+      var selectedFreeRect = this.selectFreeRectangle(new_node);
+      if(selectedFreeRect == null) {
+        console.log('doesnt fit in any free rects');
         return null;
-      }
-      if ( node.rect.size === new_node.rect.size ) {
-        console.log('perfect fit');
+      } else {
+        console.log('placing node in tree:');
+        new_node.rect.x = selectedFreeRect.x;
+        new_node.rect.y = selectedFreeRect.y;
+        this.placedImageRects.push(new_node.rect);
         node = new_node;
-        return node;
-      } else {
-        console.log('splitting');
-        var dw = node.rect.w - new_node.rect.w;
-        var dh = node.rect.h - new_node.rect.h;
+        console.log(node);
       }
-
-      var freeRect2, freeRect1;
-      console.log('INSERTING:');
-      console.log(new_node);
-      console.log('INTO:');
-      console.log(node);
-      if (dw > dh && dh > 0) {
-        console.log('method 1');
-        freeRect1 = Rect.create(
-          node.rect.x + new_node.rect.w, 
-          node.rect.y, 
-          node.rect.w - (node.rect.x + new_node.rect.w), 
-          new_node.rect.h);
-        freeRect2 = Rect.create(
-          node.rect.x, 
-          node.rect.y + new_node.rect.h, 
-          node.rect.w, 
-          node.rect.h - (node.rect.y + new_node.rect.h));
-      } else {
-        console.log('method 2');
-        freeRect1 = Rect.create(
-          node.rect.x + new_node.rect.w, 
-          node.rect.y, 
-          node.rect.w - (node.rect.x + new_node.rect.w), 
-          node.rect.h);
-        freeRect2 = Rect.create(
-          node.rect.x, 
-          node.rect.y + new_node.rect.h, 
-          new_node.rect.w, 
-          node.rect.h - (node.rect.y + new_node.rect.h));
-      }
-
       if (node === this.root) {
         console.log('new root');
         this.root = new_node
       }
+      
       node = new_node;
       node.left = Node.create(null);
       node.right = Node.create(null);
       console.log('parent');
-      console.log(node.rect);
+      console.log(node);
       console.log('new left child');
-      console.log(node.left.rect);
+      console.log(node.left);
       console.log('new right child');
-      console.log(node.right.rect)
+      console.log(node.right);
       return node;
     }
   },
 
-  selectRectangle(node) {
+  printPlacedImageRects: function() {
+    console.log('PLACED IMAGE RECTS');
+    console.log(this.placedImageRects);
+  },
+
+  getPlacedImageRects: function() {
+    return this.placedImageRects;
+  },
+
+  selectFreeRectangle: function(new_node) {
     for(var i = 0; i < this.freeRectangles.length; i++) {
-      if ( this.freeRectangles[i].size < node.rect.size) {
-        
+      console.log(this.freeRectangles[i].size + 'vs' + new_node.rect.size);
+      if ( this.freeRectangles[i].size > new_node.rect.size) {
+        console.log('found suitable free rectangle');
+        var dw = this.freeRectangles[i].w - new_node.rect.w;
+        var dh = this.freeRectangles[i].h - new_node.rect.h;
+        if(dw >= 0 && dh >= 0) {
+          if (dw > dh) {
+            console.log('method 1');
+            freeRect1 = Rect.create(
+              this.freeRectangles[i].x + new_node.rect.w, 
+              this.freeRectangles[i].y, 
+              this.freeRectangles[i].w - (this.freeRectangles[i].x + new_node.rect.w), 
+              new_node.rect.h);
+            freeRect2 = Rect.create(
+              this.freeRectangles[i].x, 
+              this.freeRectangles[i].y + new_node.rect.h, 
+              this.freeRectangles[i].w, 
+              this.freeRectangles[i].h - (this.freeRectangles[i].y + new_node.rect.h));
+          } else {
+            console.log('method 2');
+            freeRect1 = Rect.create(
+              this.freeRectangles[i].x + new_node.rect.w, 
+              this.freeRectangles[i].y, 
+              this.freeRectangles[i].w - (this.freeRectangles[i].x + new_node.rect.w), 
+              this.freeRectangles[i].h);
+            freeRect2 = Rect.create(
+              this.freeRectangles[i].x, 
+              this.freeRectangles[i].y + new_node.rect.h, 
+              new_node.rect.w, 
+              this.freeRectangles[i].h - (this.freeRectangles[i].y + new_node.rect.h));
+          }
+        }
+        var selectedRect = this.freeRectangles[i];
+        this.freeRectangles.splice(i, 1);
+        if (freeRect1.w > 0 && freeRect1.h > 0) {
+          this.freeRectangles.push(freeRect1);
+        }
+        if (freeRect2.w > 0 && freeRect2.h > 0) {
+          this.freeRectangles.push(freeRect2);
+        }
+        console.log('FREE RECTS:');
+        console.log(this.freeRectangles);
+        return selectedRect;
       }
     }
+    return null;
   },
 
   remove: function(node) {

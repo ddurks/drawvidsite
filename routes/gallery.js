@@ -21,7 +21,8 @@ async function generate_gallery(data) {
   }));
   //console.log(imageRects);
   packer.BinarySearchTree.pack(imageRects, 500, 500);
-  return imageRects;
+  packer.BinarySearchTree.printPlacedImageRects();
+  return packer.BinarySearchTree.getPlacedImageRects();
 }
 
 module.exports = generate_gallery;
