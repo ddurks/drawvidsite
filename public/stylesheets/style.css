@@ -7,6 +7,10 @@ img.homepost {
   height: auto;
   max-height: 75%;
 }
+img.archivepost {
+  max-width: 70%;
+  height: auto;
+}
 body {
   text-align: center;
   font-weight: bold;

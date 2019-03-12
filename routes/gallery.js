@@ -2,7 +2,7 @@ var packer = require('./image-packer');
 var probe = require('probe-image-size');
 
 async function generate_gallery(data) {
-  var bst = packer.BinarySearchTree.create();
+  var bst = packer.ImagePacker.create();
   var imageRects = new Array();
   await Promise.all(data.map(async (element) => {
     var skip = false;
@@ -20,9 +20,8 @@ async function generate_gallery(data) {
     } 
   }));
   //console.log(imageRects);
-  packer.BinarySearchTree.pack(imageRects, 500, 500);
-  packer.BinarySearchTree.printPlacedImageRects();
-  return packer.BinarySearchTree.getPlacedImageRects();
+  packer.ImagePacker.pack(imageRects, 1000, 1000);
+  return packer.ImagePacker.getPlacedImageRects();
 }
 
 module.exports = generate_gallery;
