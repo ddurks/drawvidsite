@@ -118,3 +118,20 @@ button.archive-button:hover {
   font-weight: bold;
   font-style: normal;
 }
+.desc-box-container {
+  text-align: center;
+}
+.desc-box {
+  display: inline-block;
+  width: 25%;
+  background-color: rgb(205, 220, 235);
+  border-radius: 15px;
+}
+#drawing-text {
+  font-weight: bolder;
+}
+#drawing-date {
+  font-weight: lighter;
+  font-style: italic;
+  font-size: 0.75em;
+}

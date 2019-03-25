@@ -8,10 +8,22 @@ function postObjectFromJSON(data) {
         id: data.id,
         text: data.text,
         image: 'https://s3.amazonaws.com/drawvid-posts/' + data.image,
+        imagename: data.image,
         link: data.link,
         created_date: data.date
     }
     return _drawing;
+}
+
+function updatePage(current_drawing) {
+    document.getElementById('main-display').src = current_drawing.image;
+    if (current_drawing.text != null) {
+        document.getElementById('drawing-text').innerHTML = current_drawing.text;
+    } else {
+        document.getElementById('drawing-text').innerHTML = current_drawing.imagename;
+    }
+    var c_d = new Date(current_drawing.created_date);
+    document.getElementById('drawing-date').innerHTML = c_d.toLocaleString('en-us', { month: 'long' }) + ' ' + c_d.getUTCDay() + ', ' + c_d.getUTCFullYear();
 }
 
 window.onload = async () => {
@@ -21,6 +33,7 @@ window.onload = async () => {
         current_drawing = postObjectFromJSON(data);
         //console.log(current_drawing);
         r_p = current_drawing.id;
+        updatePage(current_drawing);
     })
     .catch(error => console.error(error));
 }
@@ -32,7 +45,7 @@ function randomDrawing() {
     .then(data => {
         current_drawing = postObjectFromJSON(data);
         //console.log(current_drawing);
-        document.getElementById('main-display').src = current_drawing.image;
+        updatePage(current_drawing);
     })
     .catch(error => console.error(error));
 }
@@ -46,7 +59,7 @@ function prevDrawing() {
         .then(data => {
             current_drawing = postObjectFromJSON(data);
             //console.log(current_drawing);
-            document.getElementById('main-display').src = current_drawing.image;
+            updatePage(current_drawing);
         })
         .catch(error => console.error(error));
     }
@@ -61,7 +74,7 @@ function nextDrawing() {
         .then(data => {
             current_drawing = postObjectFromJSON(data);
             //console.log(current_drawing);
-            document.getElementById('main-display').src = current_drawing.image;
+            updatePage(current_drawing);
         })
         .catch(error => console.error(error));
     }
