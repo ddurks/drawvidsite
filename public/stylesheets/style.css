@@ -2,10 +2,14 @@ title {
   font: "Times New Roman";
   text-align: center;
 }
+.drawing-div {
+  text-align: center;
+}
 img.homepost {
   max-width: 60%;
   height: auto;
   max-height: 75%;
+  display: inline-block;
 }
 img.archivepost {
   max-width: 70%;
@@ -31,14 +35,15 @@ h1 {
 }
 ul.navbar li {
   display: inline;
-  margin: 0.5em 0.4em;
-  padding: 0.3em;
   background-color: rgb(205, 220, 235);
-  border-radius: 15px;
+  -webkit-animation:color-change 10s infinite alternate;
 }
 ul.navbar a {
   display: inline-block;
   padding: 10px;
+}
+img.menu-item-img {
+  max-width: 40%;
 }
 ul.navbar a:hover, ul.navbar a:visited, ul.navbar a:link, ul.navbar a:active
 {
@@ -123,15 +128,52 @@ button.archive-button:hover {
 }
 .desc-box {
   display: inline-block;
-  width: 25%;
   background-color: rgb(205, 220, 235);
   border-radius: 15px;
 }
 #drawing-text {
   font-weight: bolder;
+  padding: 1em 1em 0 1em;
 }
 #drawing-date {
   font-weight: lighter;
   font-style: italic;
   font-size: 0.75em;
+  padding: 0 1em 2em 1em;
+}
+
+@-webkit-keyframes color-change {
+  0% {
+    background-color: blue;
+  }
+  10% {
+    background-color: #8e44ad;
+  }
+  20% {
+    background-color: #1abc9c;
+  }
+  30% {
+    background-color: #d35400;
+  }
+  40% {
+    background-color: blue;
+  }
+  50% {
+    background-color: #34495e;
+  }
+  60% {
+    background-color: blue;
+  }
+  70% {
+    background-color: #2980b9;
+  }
+  80% {
+    background-color: #f1c40f;
+  }
+  90% {
+    background-color: #2980b9;
+  }
+  100% {
+    background-color: pink;
+  }
 }
