@@ -45,6 +45,9 @@ ul.navbar a {
 img.menu-item-img {
   max-width: 40%;
 }
+img.social-icon-img {
+  max-width: 5%;
+}
 ul.navbar a:hover, ul.navbar a:visited, ul.navbar a:link, ul.navbar a:active
 {
   text-decoration: none;
@@ -56,6 +59,9 @@ ul.body-list {
 }
 ul.body-list li a {
   text-decoration: none;
+}
+.footer-title {
+  font-style: normal;
 }
 .home-title {
   color: yellow;
