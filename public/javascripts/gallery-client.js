@@ -1,5 +1,5 @@
-var CANVAS_HEIGHT = 500;
-var CANVAS_WIDTH = 500;
+var CANVAS_HEIGHT = 1000;
+var CANVAS_WIDTH = 1000;
 var canvas = null;
 window.onload = async () => {
     canvas = document.createElement('canvas');
@@ -21,6 +21,7 @@ function loadImages(posts) {
     const response = fetch('generate-gallery')
     .then(response => response.json())
     .then(images => {
+        console.log(images);
         var ctx = canvas.getContext('2d');
         images.forEach(element => {
             var image = new Image();
@@ -28,9 +29,9 @@ function loadImages(posts) {
                 //console.log(element.image);
                 var canvas_x = Math.floor((Math.random() * CANVAS_HEIGHT)) - 40;
                 var canvas_y = Math.floor((Math.random() * CANVAS_WIDTH)) - 40;
-                ctx.drawImage(this, canvas_x, canvas_y);
+                ctx.drawImage(this, element.x, element.y);
             }
-            image.src = 'https://s3.us-east-2.amazonaws.com/drawvid-thumbnails/thumb-' + element.image;
+            image.src = element.image;
         });
     })
     .catch(error => console.error(error));

@@ -2,6 +2,7 @@ extends layout
 
 block scripts
   script(src='/javascripts/home-client.js')
+  script(src="https://platform.twitter.com/widgets.js")
 
 block content
   p
@@ -18,3 +19,8 @@ block content
     |
     |
     input(class='prev-next', id="next", value='>>     next', type='button', onclick='nextDrawing()')
+  br
+  div(class="desc-box-container")
+    div(class='desc-box')
+      p(id='drawing-text')
+      p(id='drawing-date')

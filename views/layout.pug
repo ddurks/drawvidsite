@@ -11,22 +11,32 @@ html
     div(class='header')
       h1 drawvid.com
       // Site navigation menu
-      ul.navbar
-        li
-          a(class='home-title', href='/') home
-        li
-          a(class='archive-title', href='/archive') archive
-        li
-          a(class='about-title', href='/about') about
-        li
-          a(class='etc-title', href='/etc') etc.
+      div(class='nav-menu')
+        ul.navbar
+          li
+            a(class='home-title', href='/')
+              img(border='0', alt='home', src='/images/home.png', class='menu-item-img')
+          li
+            a(class='archive-title', href='/archive')
+              img(border='0', alt='archive', src='/images/archive.png', class='menu-item-img')
+          li
+            a(class='about-title', href='/about')
+              img(border='0', alt='about', src='/images/about.png', class='menu-item-img')
+          li
+            a(class='etc-title', href='/etc')
+              img(border='0', alt='etc', src='/images/etc.png', class='menu-item-img')
 
     block content
 
     div(class='footer')
       address
+        div(class='footer-title') @drawvid
+        br
         div(class="twitter-link")
-          a(href='http://twitter.com/drawvid') twitter.com/drawvid
+          a(href='http://twitter.com/drawvid')
+            img(border='0', alt='twitter', src='/images/twitter.png', class='social-icon-img')
+          a(href='https://www.instagram.com/drawvid')
+            img(border='0', alt='instagram', src='/images/instagram.png', class='social-icon-img')
         |
         br
         | 2019
