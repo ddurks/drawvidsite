@@ -42,6 +42,10 @@ ul.navbar a {
   display: inline-block;
   padding: 10px;
 }
+.menu-title {
+  color: white;
+  margin: 0px 0px;
+}
 img.menu-item-img {
   max-width: 40%;
 }
@@ -62,19 +66,6 @@ ul.body-list li a {
 }
 .footer-title {
   font-style: normal;
-}
-.home-title {
-  color: yellow;
-  text-decoration: underline;
-}
-.archive-title {
-  color: rgb(235, 86, 86);
-}
-.about-title {
-  color: green;
-}
-.etc-title {
-  color: blue;
 }
 address {
   margin-top: 1em;
