@@ -18,7 +18,7 @@ const height = 275;
 const scaledWidth = scale * width;
 const scaledHeight = scale * height;
 var man_img = new Image();
-man_img.src = '/images/small-man-sprite-sheet.png';
+man_img.src = '/images/small_man_sprite_sheet.png';
 
 //  animation frame
 let frame = 0;
